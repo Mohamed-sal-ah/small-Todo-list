@@ -1,0 +1,19 @@
+{
+  "name": "graphql-test2",
+  "version": "1.0.0",
+  "main": "api/server.js",
+  "dependencies": {
+    "date-format": "^3.0.0",
+    "apollo-server": "^2.15.1",
+    "lowdb": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "server": "node api/server.js",
+    "react-app": "cd client/ && yarn start",
+    "react-install" : "cd client/ && yarn install"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

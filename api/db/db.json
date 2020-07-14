@@ -1,0 +1,22 @@
+{
+  "todo": [
+    {
+      "text": "Wake up",
+      "id": 0,
+      "editedDate": "",
+      "createDate": "2020-07-14 13:59:18"
+    },
+    {
+      "text": "Eat breakfast and milk",
+      "id": 1,
+      "editedDate": "2020-07-14 13:59:54",
+      "createDate": "2020-07-14 13:59:25"
+    },
+    {
+      "text": "Brush my teeth",
+      "id": 2,
+      "editedDate": "",
+      "createDate": "2020-07-14 13:59:34"
+    }
+  ]
+}
