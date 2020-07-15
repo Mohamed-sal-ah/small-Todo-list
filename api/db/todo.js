@@ -32,7 +32,10 @@ const createTodoModel = db => {
       const getAllTodo = db.get("todo").value()
       const filterTodo = getAllTodo.filter(item => item.id !== idNumb)
       const deleted = getAllTodo.find(item => item.id === idNumb)
-      return {filtredObj : filterTodo, deletedObj : deleted}
+      const updatedD = filterTodo.map((item,index) => {
+        return { id: index, text: item.text, createDate: item.createDate, editedDate: item.editedDate}
+      })
+      return {filtredObj : updatedD, deletedObj : deleted}
     },
     edit(id, text) {
       const idNumb = parseInt(id)
