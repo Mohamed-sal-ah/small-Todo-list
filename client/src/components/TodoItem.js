@@ -44,35 +44,36 @@ class TodoItem extends Component {
         const { toggleEdit, editInput } = this.state
         return (
             <li id={todo.id}>
+                {todo.editedDate ? <p>
+                    Edited at : {todo.editedDate}
+                </p> : <p>Created at : {todo.createDate}</p>}
                 {toggleEdit ? <Mutation mutation={EDIT_TODO_QUERY}>
                     {(editTodo, { data }) => (
-                        <>
+                        <div className='edit'>
                             <input onChange={this.onChangeEdit} value={editInput} />
                             <button onClick={() => {
                                 this.setState({ toggleEdit: false })
                                 editTodo({ variables: { id: todo.id, text: this.state.editInput } })
                             }}>Submit Edit</button>
-                        </>
+                        </div>
                     )
                     }
                 </Mutation> : <h4>{todo.text}</h4>}
-                <p>Created at : {todo.createDate}</p>
-                {todo.editedDate ? <p>
-                    Edited at : {todo.editedDate}
-                </p> : null}
-                <Mutation mutation={DELETE_TODO_QUERY}>
-                    {(deleteTodo, { data }) => (
-                        <button type="button" onClick={() => {
-                            deleteTodo({ variables: { id: todo.id } })
-                            setTimeout(() => {
-                                window.location.reload(false)
-                            },100)
+                <div className='button-group'>
+                    <button onClick={this.toggleEditMode}>{toggleEdit ? 'Cancel' : 'Edit'}</button>
+                    <Mutation mutation={DELETE_TODO_QUERY}>
+                        {(deleteTodo, { data }) => (
+                            <button className='danger' type="button" onClick={() => {
+                                deleteTodo({ variables: { id: todo.id } })
+                                setTimeout(() => {
+                                    window.location.reload(false)
+                                }, 100)
+                            }
+                            } >Delete</button>
+                        )
                         }
-                        } >Delete</button>
-                    )
-                    }
-                </Mutation>
-                <button onClick={this.toggleEditMode}>{toggleEdit ? 'Cancel edit' : 'Edit'}</button>
+                    </Mutation>
+                </div>
             </li>
         )
     }

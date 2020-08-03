@@ -27,7 +27,26 @@ mutation addTodo ($text : String!){
 const TodoList = () => {
     let input;
     return (
-        <div>
+        <div className='section'>
+            <Mutation mutation={ADD_TODO_QUERY}>
+                {(addTodo, { data }) => (
+                    <>
+                        <form
+                            onSubmit={() => {
+                                addTodo({ variables: { text: input.value } });
+                                input.value = '';
+                            }}
+                        >
+                            <input
+                                ref={node => {
+                                    input = node;
+                                }}
+                            />
+                            <button className='add-todo-button' type="submit">Add Todo</button>
+                        </form>
+                    </>
+                )}
+            </Mutation>
             <Query query={TODO_QUERY}>
                 {
                     ({ loading, error, data }) => {
@@ -41,25 +60,6 @@ const TodoList = () => {
                     }
                 }
             </Query>
-            <Mutation mutation={ADD_TODO_QUERY}>
-                {(addTodo, { data }) => (
-                    <div>
-                        <form
-                            onSubmit={() => {
-                                addTodo({ variables: { text: input.value } });
-                                input.value = '';
-                            }}
-                        >
-                            <input
-                                ref={node => {
-                                    input = node;
-                                }}
-                            />
-                            <button type="submit">Add Todo</button>
-                        </form>
-                    </div>
-                )}
-            </Mutation>
         </div>
     )
 }
