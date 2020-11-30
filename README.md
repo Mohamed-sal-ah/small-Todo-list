@@ -3,7 +3,7 @@ Simple Todo-list build with lowdb api, Apollo GraphQL and React
 
 Install packages for api ```npm install```
 
-Install packages for api  ```npm run react-install```
+Install packages for client  ```npm run react-install```
 
 To run API server ```npm run server```
 
