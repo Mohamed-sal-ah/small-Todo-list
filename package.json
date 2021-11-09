@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "api/server.js",
   "dependencies": {
-    "apollo-server": "^2.15.1",
+    "apollo-server": "^2.25.3",
     "date-format": "^3.0.0",
     "lowdb": "^1.0.0"
   },
