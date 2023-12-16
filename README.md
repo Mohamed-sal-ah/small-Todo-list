@@ -1,5 +1,5 @@
 # Todo-list
-Simple Todo-list build with lowdb api, Apollo GraphQL and React.
+Simple Todo-list build with lowdb api, Apollo GraphQL, React and Typescript.
 
 Install packages for api ```npm install```
 
