@@ -1,17 +1,16 @@
 {
   "name": "graphql-test2",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "api/server.js",
   "dependencies": {
-    "apollo-server": "^2.25.4",
-    "date-format": "^3.0.0",
-    "lowdb": "^1.0.0"
+    "@apollo/server": "^4.9.5",
+    "lowdb": "^6.1.1",
+    "nanoid": "^5.0.3"
   },
-  "devDependencies": {},
   "scripts": {
-    "server": "node api/server.js",
-    "react-app": "cd client/ && yarn start",
-    "react-install": "cd client/ && yarn install"
+    "server": "node api/server.mjs",
+    "react-app": "cd client/ && npm run dev",
+    "react-install": "cd client/ && npm install"
   },
   "author": "",
   "license": "ISC",

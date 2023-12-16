@@ -1,22 +1,19 @@
 {
-  "todo": [
+  "todos": [
     {
       "text": "Wake up",
-      "id": 0,
-      "editedDate": "",
-      "createDate": "2020-07-14 13:59:18"
+      "id": "zvjxTty_",
+      "status": true
     },
     {
-      "text": "Eat breakfast and milk",
-      "id": 1,
-      "editedDate": "2020-07-14 13:59:54",
-      "createDate": "2020-07-14 13:59:25"
+      "text": "Eat breakfast",
+      "id": "FbfWAUDC",
+      "status": false
     },
     {
       "text": "Brush my teeth",
-      "id": 2,
-      "editedDate": "",
-      "createDate": "2020-07-14 13:59:34"
+      "id": "acOCF2Ha",
+      "status": false
     }
   ]
 }

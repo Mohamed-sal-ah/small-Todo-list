@@ -1,8 +1,7 @@
 {
   "todo":{
-    "id": "number",
+    "id": "string",
     "text" : "string",
-    "createDate": "string",
-    "editedDate": "string"
+    "status" : "boolean"
   }
 }
