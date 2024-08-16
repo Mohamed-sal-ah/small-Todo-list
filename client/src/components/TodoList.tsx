@@ -7,7 +7,7 @@ import { Todo } from "../schemas/Todo";
 function TodoList() {
   const [editMode, setEditMode] = useState<boolean>(false);
 
-  const [editTodoItem, setEditTodoItem] = useState<null | Todo>();
+  const [editTodoItem, setEditTodoItem] = useState<null | Todo>(null);
 
   const [text, setText] = useState<string>("");
 
