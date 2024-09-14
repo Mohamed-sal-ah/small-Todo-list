@@ -1,51 +1,29 @@
-import { useMutation } from "@apollo/client";
-import { useEffect } from "react";
-import {
-  CHANGE_STATUS_TODO,
-  DELETE_TODO,
-  TODO_QUERY,
-} from "../schemas/queries";
+import { useState } from "react";
 import { Todo } from "../schemas/Todo";
 
 interface Props {
   singleTodo: Todo;
   setToEditMode: (todo: Todo) => void;
+  changeStatus : (id : string) => void;
+  deleteTodo : (id : string) => void;
 }
 
-function TodoItem({ singleTodo, setToEditMode }: Props) {
-  const [deleteTodo, { loading: deleteLoading, error: deleteError }] =
-    useMutation(DELETE_TODO, {
-      refetchQueries: [{ query: TODO_QUERY }],
-    });
+function TodoItem({ singleTodo, setToEditMode,changeStatus,deleteTodo }: Props) {
 
-  const [changeStatus, { loading: statusLoading, error: statusError }] =
-    useMutation(CHANGE_STATUS_TODO, {
-      refetchQueries: [{ query: TODO_QUERY }],
-    });
+  const [status,setStatus] = useState<boolean>(singleTodo.status)
 
-  useEffect(() => {
-    if (deleteError) {
-      console.error("deleteTodo ERROR MESSAGE: ", deleteError.message);
-      console.error(deleteError);
-    }
-
-    if (statusError) {
-      console.error("changeStatus ERROR MESSAGE: ", statusError.message);
-      console.error(statusError);
-    }
-  }, [deleteError, statusError]);
-
+  const singleChangeStatus = () => {
+    setStatus(!status)
+    changeStatus(singleTodo.id)
+  }
+  
   return (
     <li className="flex grow flex-row items-center justify-between border-b px-1 py-2 dark:border-slate-600">
       <div className="relative mr-2 flex h-6 w-6 items-center">
         <input
           type="checkbox"
-          checked={singleTodo.status}
-          disabled={statusLoading}
-          onChange={(e) => {
-            e.preventDefault();
-            changeStatus({ variables: { id: singleTodo.id } });
-          }}
+          defaultChecked={status}
+          onChange={() => {singleChangeStatus()}}
           id={singleTodo.id}
           className="peer relative h-6 w-6 shrink-0 cursor-pointer appearance-none"
         />
@@ -56,7 +34,7 @@ function TodoItem({ singleTodo, setToEditMode }: Props) {
           strokeWidth={2.5}
           stroke=""
           className={
-            (singleTodo.status
+            (status
               ? "peer-hover:bg-blue-700"
               : "peer-hover:bg-gray-300 peer-hover:dark:bg-gray-600") +
             " pointer-events-none absolute h-6 w-6 rounded-md bg-gray-200 fill-none peer-checked:bg-blue-600 peer-checked:stroke-white  dark:bg-gray-700"
@@ -71,7 +49,7 @@ function TodoItem({ singleTodo, setToEditMode }: Props) {
       </div>
       <p
         className={
-          (singleTodo.status ? "line-through opacity-40 " : "") +
+          (status ? "line-through opacity-40 " : "") +
           "grow text-base dark:text-white"
         }
       >
@@ -98,11 +76,7 @@ function TodoItem({ singleTodo, setToEditMode }: Props) {
       </button>
       <button
         className="p-1 text-white hover:opacity-70"
-        disabled={deleteLoading}
-        onClick={(e) => {
-          e.preventDefault();
-          deleteTodo({ variables: { id: singleTodo.id } });
-        }}
+        onClick={() => deleteTodo(singleTodo.id)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

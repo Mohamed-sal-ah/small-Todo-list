@@ -1,8 +1,7 @@
-import { useQuery, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import TodoItem from "./TodoItem";
-import { ADD_TODO, EDIT_TODO, TODO_QUERY } from "../schemas/queries";
 import { Todo } from "../schemas/Todo";
+import { nanoid } from "nanoid";
 
 function TodoList() {
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -15,40 +14,52 @@ function TodoList() {
 
   const [todoList, setTodoList] = useState<Todo[]>([]);
 
-  const { error: todosError, data: todosData } = useQuery(TODO_QUERY);
+  const addTodo = () => {
+    const allTodoList = todoList
+    const uniqueID = nanoid(8);
+    const newTodo : Todo = {
+        text : text,
+        id : uniqueID,
+        status : false
+     }
+    allTodoList.push(newTodo)
+    console.log(newTodo);
+    setTodoList(allTodoList)
+    localStorage.setItem('todo_list',JSON.stringify(allTodoList))
+    setText('')
+  }
 
-  const [addTodo, { loading: addTodoLoading, error: addTodoError }] =
-    useMutation(ADD_TODO, {
-      refetchQueries: [{ query: TODO_QUERY }],
-    });
+  const editTodo = () => {
+    if (editTodoItem !== null) {
+      console.log(editTodoItem);
+        
+      const allTodoList = todoList
+      const editIndex : number = todoList.findIndex(todos => todos.id == editTodoItem.id)  
+        const editedTodo = {
+          ...allTodoList[editIndex],
+          text: editInput
+        };
+        allTodoList[editIndex] = editedTodo;
+        localStorage.setItem('todo_list',JSON.stringify(allTodoList))
+        setTodoList(allTodoList)
+        cancelEditMode();
+    }
+  }
 
-  const [editTodo, { loading: editLoading, error: editError }] = useMutation(
-    EDIT_TODO,
-    {
-      refetchQueries: [{ query: TODO_QUERY }],
-    },
-  );
+  const deleteTodo = (deletId :string) => {
+    const filteredTodos = todoList.filter((todo) => todo.id !== deletId);
+    localStorage.setItem('todo_list',JSON.stringify(filteredTodos))
+    setTodoList(filteredTodos)
+  }
 
-  useEffect(() => {
-    if (todosError) {
-      console.error("Todos ERROR MESSAGE: ", todosError.message);
-      console.error(todosError);
-    }
-    if (addTodoError) {
-      console.error("addTodo ERROR MESSAGE: ", addTodoError.message);
-      console.error(addTodoError);
-    }
-    if (editError) {
-      console.error("editTodo ERROR MESSAGE: ", editError.message);
-      console.error(editError);
-    }
-  }, [todosError, editError, addTodoError]);
-
-  useEffect(() => {
-    if (todosData) {
-      setTodoList(todosData.todos);
-    }
-  }, [todosData]);
+  const changeStatus = (statusId : string) => {
+    const allTodoList = todoList
+    const todoStatusIndex = allTodoList.findIndex((todo) => todo.id === statusId)  
+    const changeTodoStatus = {...allTodoList[todoStatusIndex],status: !allTodoList[todoStatusIndex].status}
+    allTodoList[todoStatusIndex] = changeTodoStatus
+    localStorage.setItem('todo_list',JSON.stringify(allTodoList))
+    setTodoList(allTodoList)
+  }
 
   const setToEditMode = (todo: Todo) => {
     setEditTodoItem(todo);
@@ -56,25 +67,26 @@ function TodoList() {
     setEditInput(todo.text);
     setText("");
   };
-
+  
   const cancelEditMode = () => {
     setEditTodoItem(null);
     setEditMode(false);
     setEditInput("");
   };
 
+  useEffect(() => {
+    const todoLocalStorage : null | string = localStorage.getItem('todo_list')
+    if (todoLocalStorage !== null) {
+      setTodoList(JSON.parse(todoLocalStorage))
+    }
+  },[])
+  
+
   return (
     <div className="w-full">
       {editTodoItem && editMode ? (
-        <form
+        <div
           className="flex flex-col gap-3 py-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            editTodo({
-              variables: { id: editTodoItem.id, text: editInput },
-            });
-            cancelEditMode();
-          }}
         >
           <div>
             <span className="mb-1 block text-sm font-medium text-gray-800 dark:text-slate-200">
@@ -90,8 +102,9 @@ function TodoList() {
           <div className="flex grow flex-row">
             <button
               className="rounded bg-emerald-800 px-2 py-1 tracking-wide text-white enabled:hover:bg-emerald-700 disabled:opacity-70"
-              disabled={editLoading || editInput === ""}
+              disabled={editInput === ""}
               type="submit"
+              onClick={() => editTodo()}
             >
               Update
             </button>
@@ -103,15 +116,10 @@ function TodoList() {
               Cancel
             </button>
           </div>
-        </form>
+        </div>
       ) : (
-        <form
+        <div
           className="flex flex-row items-end py-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            addTodo({ variables: { text: text } });
-            setText("");
-          }}
         >
           <div className="w-full">
             <span className="mb-1 block text-sm font-medium text-gray-800 dark:text-slate-200">
@@ -127,13 +135,13 @@ function TodoList() {
           <button
             className="hover:opacity ml-2 h-fit rounded bg-emerald-800 px-2 py-1 tracking-wide text-white enabled:hover:bg-emerald-700 disabled:opacity-70"
             type="submit"
-            disabled={addTodoLoading || text === ""}
+            disabled={text === ""}
+            onClick={() => addTodo()}
           >
             Submit
           </button>
-        </form>
+        </div>
       )}
-
       {todoList.length !== 0 && !editMode ? (
         <ul className="flex flex-col justify-center">
           {todoList.map((todo) => (
@@ -141,6 +149,8 @@ function TodoList() {
               key={todo.id}
               singleTodo={todo}
               setToEditMode={setToEditMode}
+              deleteTodo={deleteTodo}
+              changeStatus={changeStatus}
             />
           ))}
         </ul>
