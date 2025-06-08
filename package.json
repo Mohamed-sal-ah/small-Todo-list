@@ -5,7 +5,7 @@
   "dependencies": {
     "@apollo/server": "^4.9.5",
     "lowdb": "^6.1.1",
-    "nanoid": "^5.0.3"
+    "nanoid": "^5.0.9"
   },
   "scripts": {
     "server": "node api/server.mjs",
