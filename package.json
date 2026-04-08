@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "main": "api/server.js",
   "dependencies": {
-    "@apollo/server": "^4.9.5",
+    "@apollo/server": "^5.5.0",
     "lowdb": "^6.1.1",
     "nanoid": "^5.0.9"
   },
